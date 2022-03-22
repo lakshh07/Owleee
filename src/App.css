@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&family=Paytone+One&family=Montserrat:wght@400;500;700;800;900&family=Philosopher&display=swap");
+* {
+  font-family: "Raleway";
+}
+a {
+  text-decoration: none !important;
+}
+body {
+  background-color: #f5f5f5 !important;
+}
+.b ::placeholder {
+  color: white !important;
+}
+.grad-box {
+  background: hsla(224, 77%, 56%, 1) !important;
+
+  background: linear-gradient(
+    45deg,
+    hsla(224, 77%, 56%, 1) 0%,
+    hsla(181, 95%, 50%, 0.7) 100%
+  ) !important;
+
+  background: -moz-linear-gradient(
+    45deg,
+    hsla(224, 77%, 56%, 1) 0%,
+    hsla(181, 95%, 50%, 0.7) 100%
+  ) !important;
+
+  background: -webkit-linear-gradient(
+    45deg,
+    hsla(224, 77%, 56%, 1) 0%,
+    hsla(181, 95%, 50%, 0.7) 100%
+  ) !important;
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#3764E5", endColorstr="#06F3F7", GradientType=1 ) !important;
+}
+.bg-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62%;
+  height: 100%;
+}
+.address-box {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(3.5px);
+  -webkit-backdrop-filter: blur(3.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.blur2-box {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(3.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.h-shadow {
+  filter: drop-shadow(rgba(0, 0, 0, 0.4) 0px 5px 3px) !important;
+}
+.loading-bar {
+  width: 130px;
+  height: 2px;
+  background: #cfcfcf;
+  margin-top: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bar::before {
+  content: "";
+  width: 68px;
+  height: 2px;
+  background: #000;
+  position: absolute;
+  left: -34px;
+  animation: bluebar 1.5s infinite ease;
+}
+
+@keyframes bluebar {
+  50% {
+    left: 96px;
+  }
+}
