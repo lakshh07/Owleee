@@ -10,8 +10,9 @@ import {
   Link,
   Grid,
   Divider,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import m2 from "../assets/m2-2.png";
 import m3 from "../assets/m2-3.png";
 import m1 from "../assets/m2-1.png";
@@ -21,6 +22,8 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
 import truncateMiddle from "truncate-middle";
 
+import client from "../helpers/ceramicLogin";
+
 function Hero({
   avatar,
   connect,
@@ -29,6 +32,108 @@ function Hero({
   disconnect,
   chainName,
 }) {
+  const [account, setAccount] = useState();
+  const [localDid, setDid] = useState(null);
+  const [idxInstance, setIdxInstance] = useState(null);
+  const [profile, setProfile] = useState({});
+  const [loaded, setLoaded] = useState(false);
+  const idxRef = useRef(null);
+  const didRef = useRef(null);
+  idxRef.current = idxInstance;
+  didRef.current = localDid;
+
+  const toast = useToast();
+
+  let eth, localProfile;
+
+  async function connectProfile() {
+    const [account] = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    setAccount(account);
+    // await connect(connectQuery.data.connectors[0]);
+
+    toast({
+      title: "Please Wait!",
+      description: "Fetching your profile",
+      status: "info",
+      position: "top",
+      duration: 5000,
+      isClosable: true,
+    });
+    const cdata = await client();
+    const { did, idx, error } = cdata;
+    if (error) {
+      console.log("error: ", error);
+      return;
+    }
+
+    setDid(did);
+    setIdxInstance(idx);
+    console.log(idx);
+    const data = await idx.get("basicProfile", did.id);
+    if (data) {
+      setProfile(data);
+      setLoaded(true);
+      console.log(data);
+      let userName = data.name;
+      let userBio = data.bio;
+      console.log(userName);
+      console.log(userBio);
+      localProfile = data;
+      toast({
+        title: "Success",
+        description: "Profile ",
+        status: "info",
+        position: "top",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else if (!data) {
+      await idx.set("basicProfile", { name: "Anonymous", bio: "😈" });
+      const dataa = await idxRef.current.get("basicProfile", didRef.current.id);
+      setProfile(dataa);
+      setLoaded(true);
+    } else {
+      toast({
+        title: "Error",
+        description: "Not able to fetch your data, Try Again!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log("Not able to fetch your data, Try Again!");
+    }
+  }
+
+  async function updateProfile(bio, name, setChecker) {
+    if (!bio && !name) {
+      alert("error... no profile information submitted");
+      return;
+    }
+    setChecker(true);
+    if (!idxInstance) {
+      await connect();
+    }
+    const user = { ...profile };
+    if (bio) user.bio = bio;
+    if (name) user.name = name;
+    await idxRef.current.set("basicProfile", user);
+    setLocalProfileData();
+    console.log("profile updated...");
+    setChecker(false);
+  }
+
+  async function setLocalProfileData() {
+    try {
+      const data = await idxRef.current.get("basicProfile", didRef.current.id);
+      if (!data) return;
+      setProfile(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
   return (
     <>
       <Box bg="#F5F5F5" h="100vh" zIndex="2">
@@ -138,6 +243,7 @@ function Hero({
               w="min-content"
               onClick={() => {
                 connect(connectQuery.data.connectors[0]);
+                connectProfile();
               }}
             >
               Connect Wallet

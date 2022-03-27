@@ -60,6 +60,9 @@ body {
 .h-shadow {
   filter: drop-shadow(rgba(0, 0, 0, 0.4) 0px 5px 3px) !important;
 }
+.h-shadow-2 {
+  filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 5px 3px) !important;
+}
 .loading-bar {
   width: 130px;
   height: 2px;
@@ -83,4 +86,19 @@ body {
   50% {
     left: 96px;
   }
+}
+
+.grid {
+  display: grid !important;
+  grid-template-columns: 0.6fr 1.7fr 0.7fr !important;
+  gap: 0px 0px;
+}
+
+.lock {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  backdrop-filter: blur(15px) !important ;
+  background-color: rgba(0, 0, 0, 0.01);
 }
